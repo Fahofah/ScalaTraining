@@ -1,3 +1,4 @@
+import scala.util.Random
 // Ex 1
 println("Ex1")
 println("Hello World!")
@@ -99,7 +100,27 @@ ageInSecs(25)
 println("Ex17")
 multiString(3,"Hi") //same as Ex5
 
-// Ex 18
+// Ex 19 - Iteration 3
+println("Ex19")
+def rectangularize(word: String, dim : Int): Unit = {
+  for(i<- 1 to dim;j<- 1 to dim){
+    print(word)
+    if(j==dim) println("\t")
+  }
+}
+rectangularize("H",8)
 
+// Ex 20
+println("Ex 20 - FizzBuzz")
+def fizzbBuzz(phrase1 : String, phrase2 : String, topRange : Int): Unit = {
+  for(i<-1 to topRange){
+    if (i%15 == 0) print(phrase1+phrase2)
+    else if (i%3 == 0) print(phrase1)
+    else if(i%5 == 0) print(phrase2)
+    else print(i)
+    print(",")
+  }
+}
+fizzbBuzz("fizz","buzz",50)
 
-
+// Ex 21
