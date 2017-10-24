@@ -91,8 +91,7 @@ addUp(0,0,true)
 // Ex 14
 println("Ex14")
 def ageInSecs (age : Int): Unit = {
-  val ageSeconds = age*365*24*60*60
-  println(s"You are $ageSeconds seconds old!")
+  println(s"You are ${age*365*24*60*60} seconds old!")
 }
 ageInSecs(25)
 
@@ -104,8 +103,8 @@ multiString(3,"Hi") //same as Ex5
 println("Ex19")
 def rectangularize(word: String, dim : Int): Unit = {
   for(i<- 1 to dim;j<- 1 to dim){
-    print(word)
-    if(j==dim) println("\t")
+    print(word + "\t")
+    if(j==dim) println()
   }
 }
 rectangularize("H",8)
@@ -123,4 +122,5 @@ def fizzbBuzz(phrase1 : String, phrase2 : String, topRange : Int): Unit = {
 }
 fizzbBuzz("fizz","buzz",50)
 
-// Ex 21
+
+
