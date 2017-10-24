@@ -11,7 +11,7 @@ rect_recur("H",8, 8)
 // Ex 23
 println("Ex 23 - RecursiveFizz")
 def recur_fizz(phrase1 : String, phrase2 : String, botRange :Int, topRange : Int): Unit = {
-  var i = botRange
+  val i = botRange
   if(i<=topRange) {
     if (i % 15 == 0) print(phrase1 + phrase2)
     else if (i % 3 == 0) print(phrase1)

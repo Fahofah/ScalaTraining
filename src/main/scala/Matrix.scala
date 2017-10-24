@@ -7,24 +7,19 @@ object Matrix extends App {
   val randomLine =(70 to 110).toArray
 
   def randomPick(): Char = {
-    val r = new scala.util.Random
-    val r1 = r.nextInt(alphanum.length)
-    alphanum(r1)
+    alphanum(scala.util.Random.nextInt(alphanum.length))
   }
 
   def randomChange(): Int = {
-    val r = new scala.util.Random
-    val r1 = r.nextInt(randomLine.length)
-    randomLine(r1)
+    randomLine(scala.util.Random.nextInt(randomLine.length))
   }
 
-    var stop = false
+    val stop = false
     var change = randomChange()
 
   def matrix() : Unit = {
     while(!stop) {
       print(randomPick())
-      //if (readLine() == "q") stop = true
       i += 1
       if (i==change) {
         println()
