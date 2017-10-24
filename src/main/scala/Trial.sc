@@ -1,3 +1,3 @@
-println("asda")
+println(Console.)
 
-var a = 106
+var a = 11
