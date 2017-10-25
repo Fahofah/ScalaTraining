@@ -61,11 +61,22 @@ def swap (list : Any): Any = {
         case _ => list
       }
     }
-
-
-
   }
 }
 swap(numList)
 
+// Ex 26 -Map
+println("Ex 26")
+val list = List(1,20,33,41,53,6)
+println(list map (value => if (value >20) value * 10 else value))
 
+// Ex 26 -Map
+println("Ex 27")
+val wordList = List("aba","helloman","manaby","papatya","my","ratatuille")
+println(wordList map (word => if (word.length >4) word))
+
+
+// Ex 27
+println("Ex 27")
+val listofLists = List(List(List(1,2,3,4,5), List(6,7,8,9,10)), List(List(11,12,13,14,15), List(16,17,18,19,20)))
+println(listofLists flatMap( _ flatMap(_.toList)))
