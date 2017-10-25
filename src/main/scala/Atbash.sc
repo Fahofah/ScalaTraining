@@ -4,15 +4,17 @@ def atbashIt (word: String) = {
   var atbashWord = ""
 
   for (letter <- word) {
+    if (alphabet contains letter) {
+      if (letter == ' ') atbashWord += " "
 
-    if (letter == ' ') atbashWord += " "
-
-    else {
-      val currentIndex = alphabet.indexOf(letter)
-      val atbashIndex = 25 - currentIndex
-      atbashWord += alphabet(atbashIndex)
+      else {
+        val currentIndex = alphabet.indexOf(letter)
+        val atbashIndex = 25 - currentIndex
+        atbashWord += alphabet(atbashIndex)
+      }
     }
+    else atbashWord += letter
   }
   println(atbashWord)
 }
-atbashIt("gsrh rh zm vcznkov lu gsv zgyzhs xrksvi")
+atbashIt("gsrh rh zm vcznkov l%u gsv zgyzhs xrksvi")
