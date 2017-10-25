@@ -5,8 +5,8 @@ def atbashIt (word: String) = {
 
   for (letter <- word) {
     if (alphabet contains letter) {
-      if (letter == ' ') atbashWord += " "
 
+      if (letter == ' ') atbashWord += " "
       else {
         val currentIndex = alphabet.indexOf(letter)
         val atbashIndex = 25 - currentIndex

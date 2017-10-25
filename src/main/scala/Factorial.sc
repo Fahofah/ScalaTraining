@@ -5,7 +5,6 @@ def isFactorial(num: Int): Unit = {
   while (product<num){
     product = multiplier * (product)
     multiplier += 1
-
   }
   if(product == num) println(multiplier-1+"!")
   else println("NONE")
