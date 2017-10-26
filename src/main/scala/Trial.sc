@@ -1,1 +1,3 @@
-var a = 10
+println(Console.)
+
+var a = 11
