@@ -1,5 +1,6 @@
 package garage
 
-class Vehicle {
+abstract class Vehicle(ownerID: Int,make: String,model: String, checkIn: String,checkOut: String = "", fixed: Boolean =  false) {
+
 
 }
