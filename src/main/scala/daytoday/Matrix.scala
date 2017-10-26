@@ -1,4 +1,4 @@
-import scala.util.Random
+package daytoday
 
 object Matrix extends App {
 
@@ -14,8 +14,8 @@ object Matrix extends App {
     randomLine(scala.util.Random.nextInt(randomLine.length))
   }
 
-    val stop = false
-    var change = randomChange()
+  val stop = false
+  var change = randomChange()
 
   def matrix() : Unit = {
     while(!stop) {

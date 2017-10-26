@@ -90,7 +90,5 @@ def totalPrice(amount: Int )(price: Double)(func: Double => Double) = {
 }
 val fiveItems = totalPrice(5) _
 fiveItems(34)(finalPrice)
-
 totalPrice(4)(60)(finalPrice)
 
-//val tomatoPrice = totalPrice_(1.4)_
