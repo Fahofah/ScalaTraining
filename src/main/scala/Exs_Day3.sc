@@ -13,8 +13,7 @@ longest
 // Ex 31 - Functional
 println("Ex31")
 
-val test = java.util.TimeZone.getAvailableIDs.map(word=> word.split("/").last ).filter(slot=> slot.length > 1).grouped(10)
-test.foreach(value => value.foreach(println))
+java.util.TimeZone.getAvailableIDs.map(word=> word.split("/").last ).filter(slot=> slot.length > 1).grouped(10).foreach(value => value.foreach(println))
 
 // Ex 32 - Fibonacci
 println("Ex32")
@@ -73,11 +72,10 @@ else println(s"$string2 does not contain $string1")}, "liver", "liverpool")
 // Ex 38
 println("Ex38")
 def finalPrice(price: Double): Double = {
-  var thePrice = price
   if (price >= 50) {
-    thePrice = price * .9
+    price * .9
   }
-  thePrice * 1.2
+  price * 1.2
 }
 finalPrice(78)
 
@@ -92,5 +90,3 @@ val fiveItems = totalPrice(5) _
 fiveItems(34)(finalPrice)
 
 totalPrice(4)(60)(finalPrice)
-
-//val tomatoPrice = totalPrice_(1.4)_
