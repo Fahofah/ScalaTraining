@@ -1,3 +1,4 @@
+import scala.collection.immutable.Range
 import scala.util.Random
 // Ex 1
 println("Ex1")
@@ -122,5 +123,5 @@ def fizzbBuzz(phrase1 : String, phrase2 : String, topRange : Int): Unit = {
 }
 fizzbBuzz("fizz","buzz",50)
 
-
-
+val a= '2'
+a.isDigit
