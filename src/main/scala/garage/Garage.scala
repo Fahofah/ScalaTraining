@@ -58,12 +58,13 @@ class Garage {
     vehType match {
       case "car" =>  var theCar = carList.filter(_.ownerID == id)
         if(theCar.size >1) theCar = theCar.filter(_.model == model)
-        theCar.
+
 
       case "bike" => var theBike = bikeList.filter(_.ownerID == id)
         if(theBike.size >1) theBike = theBike.filter(_.model == model)
-        theBike.map(_.copy(fixed = true))
-
+        val fixedBike = theBike.map(_.copy(fixed = true))
+        bikeList +: fixedBike
+        println("ADDEDD")
     }
 
   }

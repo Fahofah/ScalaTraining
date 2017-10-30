@@ -15,8 +15,8 @@ object Console extends App {
   myGarage.addBike
 
   println(myGarage.carList)
-  myGarage.fixVehicle(1,"car")
+  myGarage.fixVehicle(1,"bike")
 
-  println(myGarage.carList)
+  println(myGarage.bikeList)
 
 }
