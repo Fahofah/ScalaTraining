@@ -9,8 +9,9 @@ class Garage {
 
   val customerList = scala.collection.mutable.MutableList[Customer]()
   val employeeList = scala.collection.mutable.MutableList[Employee]()
-  val carList = scala.collection.mutable.MutableList[Car]()
-  val bikeList = scala.collection.mutable.MutableList[Bike]()
+  var carList = scala.collection.mutable.MutableList[Car]()
+  var bikeList = scala.collection.mutable.MutableList[Bike]()
+  var bills = Map()
 //    val vehicleList = scala.collection.mutable.MutableList[Vehicle]() CANT ACCESS ATTRIBUTES IF LIST TYPE PARENT!!!
   val basePriceCar = 100
   val basePriceBike = 50
@@ -58,15 +59,12 @@ class Garage {
     vehType match {
       case "car" =>  var theCar = carList.filter(_.ownerID == id)
         if(theCar.size >1) theCar = theCar.filter(_.model == model)
-
-
-      case "bike" => var theBike = bikeList.filter(_.ownerID == id)
+        theCar.head.fixed = true
+      case "bike" =>
+        var theBike = bikeList.filter(_.ownerID == id)
         if(theBike.size >1) theBike = theBike.filter(_.model == model)
-        val fixedBike = theBike.map(_.copy(fixed = true))
-        bikeList +: fixedBike
-        println("ADDEDD")
+        theBike.head.fixed = true
     }
-
   }
   def getCustomerID(owner: String): Int = {
     try
@@ -80,6 +78,34 @@ class Garage {
         -1
     }
   }
+
+  def removeVehicle(id: Int, vehType: String, model: Option[String] = None): Unit = {
+    vehType match {
+      case "car" =>
+        var dropCar = carList.filter(_.ownerID == id)
+        if(dropCar.size >1) dropCar = dropCar.filter(_.model == model)
+        carList = carList diff dropCar
+      case "bike" =>
+        var dropBike = bikeList.filter(_.ownerID == id).drop(1)
+        if(dropBike.size > 1) dropBike = dropBike.filter(_.model == model).drop(1)
+        bikeList = bikeList diff dropBike
+    }
+  }
+
+  def calBills(id: Int, vehType: String): Unit = {
+    var cost = vehType match {
+      case "car" => 100 * carList.filter(_.ownerID == id).head.numSeats
+      case "bike" => bikeList.filter(_.ownerID == id).head.motorType match {
+        case x if x contains "man" => 100
+        case x if x contains "auto" => 50
+      }
+    }
+
+
+
+  }
+
+
 
   def getDetails(vehType:String): ArrayBuffer[String] = {
     val details = ArrayBuffer[String]()
