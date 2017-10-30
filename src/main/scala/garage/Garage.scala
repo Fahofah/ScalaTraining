@@ -11,7 +11,7 @@ class Garage {
   val employeeList = scala.collection.mutable.MutableList[Employee]()
   var carList = scala.collection.mutable.MutableList[Car]()
   var bikeList = scala.collection.mutable.MutableList[Bike]()
-  var bills = Map()
+  var bills = scala.collection.mutable.Map[Int, Int]()
 //    val vehicleList = scala.collection.mutable.MutableList[Vehicle]() CANT ACCESS ATTRIBUTES IF LIST TYPE PARENT!!!
   val basePriceCar = 100
   val basePriceBike = 50
@@ -40,7 +40,9 @@ class Garage {
     if(ownerID == -1) println("Customer not in database")
     else {
       val details = getDetails("Car")
-      carList += new Car(ownerID,details{0},details{1},details{2},details{3},details{4}.toInt,Calendar.getInstance().getTime.toString)
+      val newCar = new Car(ownerID,details{0},details{1},details{2},details{3},details{4}.toInt,Calendar.getInstance().getTime.toString)
+      carList += newCar
+      newCar.addParts
     }
   }
 
@@ -59,7 +61,10 @@ class Garage {
     vehType match {
       case "car" =>  var theCar = carList.filter(_.ownerID == id)
         if(theCar.size >1) theCar = theCar.filter(_.model == model)
+        val brokenParts = theCar.head.partsList.filter(_.state == "broken") //.head.state = "functioning"
+        var totalPrice: Int = brokenParts.foldLeft(0){(totalPrice,part ) => calBroken(totalPrice,part.name) }
         theCar.head.fixed = true
+        println(totalPrice)
       case "bike" =>
         var theBike = bikeList.filter(_.ownerID == id)
         if(theBike.size >1) theBike = theBike.filter(_.model == model)
@@ -92,6 +97,20 @@ class Garage {
     }
   }
 
+  def calBroken(totalPrice: Int, partName: String): Int = {
+    partName match {
+      case "tyre" => totalPrice + 20
+      case "indicator" => totalPrice + 25
+      case "breakLight" => totalPrice +15
+      case "headLight" => totalPrice + 30
+      case "engine" => totalPrice + 300
+      case "gearbox" => totalPrice + 200
+      case "window" => totalPrice + 80
+      case "electronics" => totalPrice + 70
+      case "exhaust" => totalPrice + 60
+      case "battery" => totalPrice + 120
+    }
+  }
   def calBills(id: Int, vehType: String): Unit = {
     var cost = vehType match {
       case "car" => 100 * carList.filter(_.ownerID == id).head.numSeats
@@ -100,9 +119,11 @@ class Garage {
         case x if x contains "auto" => 50
       }
     }
+    bills += (id -> cost)
+  }
 
-
-
+  def getCarPartList(id:Int): Unit ={
+    carList.filter(_.ownerID == id).head.partsList.foreach(println)
   }
 
 
