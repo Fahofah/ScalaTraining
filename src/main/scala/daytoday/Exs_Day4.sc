@@ -18,6 +18,3 @@ def isTooHot(temp: Int, isSummer: Boolean): Boolean = {
   else true
 }
 isTooHot(91,true)
-
-// Ex 42
-println("Ex42")
