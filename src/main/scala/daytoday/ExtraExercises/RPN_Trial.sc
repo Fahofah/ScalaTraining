@@ -1,57 +1,34 @@
-
-
-
-
-
-def execRPN(stack: List[Double],x: String): List[Double]= {
+def execRPN(stack: Array[Double],x: String): Array[Double]= {
 
   val numbers = (0 to 9).map(_.toString)
 
   val operators = "+ - * /"
 
-  def isNumber(text: String): Boolean = numbers.exists(text contains _)
 
-  def isOperator(text: String): Boolean = operators contains text
+  def isNumber(number: String): Boolean = numbers.exists(number contains _)
 
-//  x match {
-//    case r if (isNumber(x)) =>     val newStack = x.toDouble +: stack
-//      newStack
-//    case y if (isOperator(x)) =>   val num2 = stack.head
-//      val num1 = stack.tail.head
-//      val result = applyOperator(num1, num2, operator = x)
-//      val newStack = result +: stack.drop(1).drop(1)
-//      newStack
-//  }
+  def isOperator(symbol: String): Boolean = operators contains symbol
+
   if (isNumber(x)) {
-    val newStack = x.toDouble +: stack
-    newStack
+    x.toDouble +: stack
   }
-  else {
+  else if (isOperator(x)) {
 
     val num2 = stack.head
     val num1 = stack.tail.head
-    val result = applyOperator(num1, num2, operator = x)
-    val newStack = result +: stack.drop(1).drop(1)
-    newStack
-
-  }
-  
-//else {
-//  stack
-//}
-
-  def applyOperator(num1: Double, num2: Double, operator: String): Double = {
-    val result = operator match {
-      case "+" => num1 + num2
+    val result = x match {
       case "-" => num1 - num2
       case "/" => num1 / num2
       case "*" => num1 * num2
+      case "+" => num1 + num2
     }
-    result
+    result +: stack.drop(2)
   }
-
+  else {
+    println("else")
+    stack
+  }
 }
 
-
-val X = "1 2 +"
-X.split(" ").foldLeft(List[Double]()){(stack, x) => execRPN(stack,x)}
+val X = "90 34 12 33 55 66 + * - + -"
+val results: Array[Double] = X.split(" ").foldLeft(Array[Double]())((results,f) => execRPN(results,f))
