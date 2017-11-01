@@ -52,10 +52,10 @@ tailFactorial(7)
 //Ex 35
 println("Ex35")
 def checkContain(string1: String, string2: String): Unit ={
-  if (string2 contains string2) println(s"$string2 contains $string1")
+  if (string2 contains string1) println(s"$string2 contains $string1")
   else println(s"$string2 does not contain $string1")
 }
-checkContain("liver","liverpool")
+checkContain("bird","alibaba")
 
 // Ex 36
 println("Ex36")
@@ -66,8 +66,9 @@ doesContain(checkContain,"liver","liverpool")
 
 // Ex 37
 println("Ex37")
-doesContain((string1:String, string2: String ) => {  if (string2 contains string2) println(s"$string2 contains $string1")
-else println(s"$string2 does not contain $string1")}, "liver", "liverpool")
+doesContain((string1:String, string2: String ) => {
+  if (string2 contains string1) println(s"$string2 contains $string1")
+  else println(s"$string2 does not contain $string1")}, "liver", "liverpool")
 
 // Ex 38
 println("Ex38")
@@ -88,4 +89,18 @@ def totalPrice(amount: Int )(price: Double)(func: Double => Double) = {
 }
 val fiveItems = totalPrice(5) _
 fiveItems(34)(finalPrice)
-totalPrice(4)(60)(finalPrice)
+totalPrice(4)(50)(finalPrice)
+
+def isProperNumber(number: String): Any = {
+  val numbers = (0 to 9).map(_.toString)
+ number.distinct.length == numbers.map(number contains _).count(_ == true)
+
+}
+
+val c = 2
+val (a,b) = c match {
+  case 1 => (4,5)
+  case 2 => (7,8)
+}
+
+"2million".replaceAll("million","zillion")
