@@ -45,8 +45,10 @@ class Day2_tests extends TestBaseClass with MockOutput {
 
     assert(Day2functions.swap(List(1,2,3,4)) == List(2,1))
   }
+  it should "take in an array and do the same" in {
+    Day2functions.swap(Array(8,9,5,6)) shouldEqual Array(9, 8)
+  }
   it should "take in a TUPPLE and do the same" in {
-    //assert(Day2functions.swap(Array(8,9,5,6)) == Array(9, 8))
     assert(Day2functions.swap((2, 3)) == (3, 2))
   }
 

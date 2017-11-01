@@ -76,3 +76,5 @@ println("Ex 27")
 val listofLists = List(List(List(1,2,3,4,5), List(6,7,8,9,10)), List(List(11,12,13,14,15), List(16,17,18,19,20)))
 println(listofLists flatMap( _ flatMap(_.toList)))
 
+
+"I don’t know, let me google it up for you".toUpperCase

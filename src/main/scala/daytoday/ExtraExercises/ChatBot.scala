@@ -2,28 +2,41 @@ package daytoday.ExtraExercises
 
 object ChatBot extends App {
 
-  val botName = "Matilda"
-  val randomAns = Array("I don’t know, let me google it up for you","I don’t know and I’m too lazy to look it up...")
+  val BotName = "Matilda"
   var yell = 0
-  var quit = true
+  var play = true
 
-  println(s"Hi I am $botName, I am here to help. Ask me anything!")
+  def greet: String = s"Hi I am $BotName, I am here to help. Ask me anything!"
 
-  def pickAns(): Int = {
+  def pickAns: Int = {
     scala.util.Random.nextInt(2)
   }
+  def printToScreen(string :String): Unit = println(string)
 
-  while(quit) {
-    val question = readLine()
-    if (question == "q") quit = false
-    else if (question == botName) println("Yes?")
+  def question: String = readLine()
 
-    else if (question.toUpperCase == question && question != "") {
-      if (yell < 2) println("Whoa,\nrelax a bit will ya")
-      else println(randomAns(pickAns()).toUpperCase())
-      yell += 1
-    }
-    else println(randomAns(pickAns()))
-
+  def script(question: String): String ={
+    val randomAns = Array("I don’t know, let me google it up for you","I don’t know and I’m too lazy to look it up...")
+    val answer = question match {
+        case "q" =>
+          play = false
+          "Thank you and byebye!"
+        case BotName => "Yes?"
+        case x if x.toUpperCase == x && x != "" =>
+          if( yell < 2 ) {
+            yell += 1
+            "Whoa,\nrelax a bit will ya"
+          }
+          else randomAns(pickAns).toUpperCase()
+        case _ =>
+          if (yell == 2) yell = 0
+          randomAns(pickAns)
+      }
+    answer
   }
+  def session(): Unit= {
+    printToScreen(greet)
+    while (play) printToScreen(script(question))
+  }
+session()
 }

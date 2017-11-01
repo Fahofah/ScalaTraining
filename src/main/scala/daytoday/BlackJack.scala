@@ -13,18 +13,12 @@ object BlackJack extends App {
     }
   }
 
-  def printResult(result: Int): Unit = {
+  def printResult(result: Int): String = {
     result match {
-      case 0 => println("Both hands busted!")
-      case -1 => println("It's a draw!")
-      case _ => println(s"$result wins!")
+      case 0 => "Both hands busted!"
+      case -1 => "It's a draw!"
+      case _ => s"$result wins!"
     }
   }
-
-  def playBlackJack(hand1: Int, hand2: Int): Unit = {
-    printResult(compareHands(hand1,hand2))
-  }
-
-  playBlackJack(23,1)
 }
 

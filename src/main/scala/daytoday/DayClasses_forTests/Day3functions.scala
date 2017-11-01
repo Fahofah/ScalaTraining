@@ -32,7 +32,7 @@ class Day3functions extends Output {
 
 
   def checkContain(string1: String, string2: String): Unit ={
-    if (string2 contains string1) print(s"$string2 contains $string1")
+    if (string2 contains string2) print(s"$string2 contains $string1")
     else print(s"$string2 does not contain $string1")
   }
 
