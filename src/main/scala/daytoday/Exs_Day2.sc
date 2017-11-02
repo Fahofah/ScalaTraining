@@ -1,12 +1,14 @@
 // Ex 22 - Recursion
 println("Ex22")
-def rect_recur(word: String, width : Int, height : Int): Unit = {
-  if (height >= 0) {
-    println((word + "\t") * width )
-    rect_recur(word, width, height -1)
+def rect_recur(word: String, width : Int, height : Int,endString : String = ""): String = {
+  var newString = endString
+  if (height > 0) {
+    newString +=  ((word + "\t") * width ) + "\n"
+    rect_recur(word, width, height -1,newString)
   }
+  else newString
 }
-rect_recur("H",8, 8)
+rect_recur("H",2, 2)
 
 // Ex 23
 println("Ex 23 - RecursiveFizz")
@@ -45,25 +47,18 @@ match_addUp(3,0,true)
 //Ex25 - Pattern Match 2
 println("Ex25")
 val numArray = Array(1,2,3,4,5,6)
-val numList = List(1,3,4,5,6)
+val numList = List(1,3,5)
+val tupleList = (42, "fish")
 def swap (list : Any): Any = {
-
   list match {
-    case list: Array[Int] => {
-      list.splitAt(2) match {
-        case (Array(x, y), z) => println("Out: " + Array(y, x).deep.mkString(","))
-        case _ => list
-      }
-    }
-    case list: List[Int] => {
-      list.splitAt(2) match {
-        case (List(x, y), z) => println(list.grouped(2).toList)
-        case _ => list
-      }
-    }
+    case x: List[Any] =>
+      val (take,leave) = x.splitAt(2)
+      take.reverse
+    case x: Array[Int] => Array(x(1),x(0))
+    case (x,y) => (y,x)
   }
 }
-swap(numList)
+swap(numArray)
 
 // Ex 26 -Map
 println("Ex 26")
@@ -80,3 +75,4 @@ println(wordList map (word => if (word.length >4) word))
 println("Ex 27")
 val listofLists = List(List(List(1,2,3,4,5), List(6,7,8,9,10)), List(List(11,12,13,14,15), List(16,17,18,19,20)))
 println(listofLists flatMap( _ flatMap(_.toList)))
+
