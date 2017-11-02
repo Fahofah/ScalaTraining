@@ -1,5 +1,7 @@
 package slick_MySQL
 
+import java.lang.Error
+
 import slick.dbio.Effect
 import slick.jdbc.MySQLProfile
 
@@ -52,7 +54,8 @@ object Main extends App {
         (12,"Tom","Marcus", 42),
         (12,"Richard","Wood", 23),
         (12,"Mary","Marcus", 41),
-        (12,"Evan","Maxis", 72)
+        (12,"Evan","Maxis", 72),
+        (13,"Tom","Marco",45)
       )
       // insert into `PEOPLE` (`PER_FNAME`,`PER_LNAME`,`PER_AGE`)  values (?,?,?)
       println(query.statements.head)
@@ -99,17 +102,66 @@ object Main extends App {
   }
 
   def searhPeople: Unit = {
-    db.run((peopleTable.filter(_.age > 40)).result.map(_.foreach{
+    db.run(peopleTable.filter(_.age > 40).result.map(_.foreach{
       case (id, fName, lName, age) => println(s"$fName $lName $age ")
     }))
   }
 
-  def countPeople(): FixedSqlAction[Int, MySQLProfile.api.NoStream, Effect.Read] = {
-    val peopleCount = peopleTable.length.result
-    peopleCount
+  def countPeople(): Unit = {
+
+    val queryUp = Future {
+      db.run(peopleTable.length.result)
+    }
+    Await.result(queryUp,Duration.Inf).andThen( {
+      case Success(value) => println("##### " + value)
+      case Failure(error) =>
+        println("Update failed due to: " + error.getMessage)
+    })
   }
 
-  println(countPeople())
+  def aveAge: Unit ={
+
+    val avgAge = Future {
+      val query = peopleTable.map(_.age).avg.result
+      db.run(query)
+    }
+    Await.result(avgAge,Duration.Inf).andThen( {
+      case Success(value) => println("Average age is: " + value)
+      case Failure(error) =>
+        println("Update failed due to: " + error.getMessage)
+    })
+  }
+
+  def mostCommonName: Unit ={
+    val comName = Future {
+      val query = peopleTable.groupBy(_.fName)
+        .map{ case (fName, results) => fName -> results.length}
+        .result
+      db.run(query)
+    }
+    Await.result(comName,Duration.Inf).andThen( {
+      case Success(value) => println("Most common Name: " + value.max._1 + " occuring " + value.max._2 + " times")
+      case Failure(error) =>
+        println("Update failed due to: " + error.getMessage)
+    })
+
+  }
+
+  def mostCommonLastName: Unit ={
+    val comName = Future {
+      val query = peopleTable.groupBy(_.lName)
+        .map{ case (fName, results) => fName -> results.length}
+        .result
+      db.run(query)
+    }
+    Await.result(comName,Duration.Inf).andThen( {
+      case Success(value) => println("Most common Name: " + value.max._1 + " occuring " + value.max._2 + " times")
+      case Failure(error) =>
+        println("Update failed due to: " + error.getMessage)
+    })
+
+  }
+  mostCommonName
 }
 
 
