@@ -125,3 +125,6 @@ fizzbBuzz("fizz","buzz",50)
 
 val a= '2'
 a.isDigit
+
+var r = new scala.util.Random()
+r.nextInt(2)

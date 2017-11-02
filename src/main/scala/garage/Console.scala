@@ -12,11 +12,22 @@ object Console extends App {
 //  println(myGarage.employeeList)
 
   myGarage.addCar
-  myGarage.addBike
+  myGarage.addCar
+  myGarage.getCarPartList(1)
 
-  println(myGarage.carList)
   myGarage.fixVehicle(1,"car")
-
-  println(myGarage.carList)
-
+//  myGarage.addBike
+//  myGarage.addBike
+//  myGarage.addCar
+//
+////  println(myGarage.carList)
+////  myGarage.fixVehicle(1,"bike")
+//
+////  myGarage.bikeList.foreach(println)
+//  myGarage.carList.foreach(println)
+//
+////  myGarage.removeVehicle(2,"car")
+//
+//  myGarage.calBills(1,"car")
+//  myGarage.bills.foreach(println)
 }
