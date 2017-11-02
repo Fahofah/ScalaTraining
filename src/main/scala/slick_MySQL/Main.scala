@@ -49,13 +49,13 @@ object Main extends App {
   def runQuery(): Unit = {
     val insertPeople = Future {
       val query = peopleTable ++= Seq(
-        (10, "Jack", "Wood", 36),
-        (20, "Tim", "Brown", 24),
-        (12,"Tom","Marcus", 42),
-        (12,"Richard","Wood", 23),
-        (12,"Mary","Marcus", 41),
-        (12,"Evan","Maxis", 72),
-        (13,"Tom","Marco",45)
+        (10, "Jack", "Wood", 36, "Lonodn"),
+        (20, "Tim", "Brown", 24, "Lonodn"),
+        (12,"Tom","Marcus", 42, "Lonodn"),
+        (12,"Richard","Wood", 23, "Manchester"),
+        (12,"Mary","Marcus", 41,"Leeds"),
+        (12,"Evan","Maxis", 72,"lhipley"),
+        (13,"Tom","Marco",45, "Leeds")
       )
       // insert into `PEOPLE` (`PER_FNAME`,`PER_LNAME`,`PER_AGE`)  values (?,?,?)
       println(query.statements.head)
@@ -71,7 +71,7 @@ object Main extends App {
   def listPeople(): Unit = {
     val queryFuture = Future {
       db.run(peopleTable.result).map(_.foreach{
-        case (id, fName, lName, age) => println(s" $id $fName $lName $age ")
+        case (id, fName, lName, age, city) => println(s" $id $fName $lName $age $city")
       })
     }
     Await.result(queryFuture, Duration.Inf).andThen( {
@@ -103,7 +103,7 @@ object Main extends App {
 
   def searhPeople: Unit = {
     db.run(peopleTable.filter(_.age > 40).result.map(_.foreach{
-      case (id, fName, lName, age) => println(s"$fName $lName $age ")
+      case (id, fName, lName, age, city) => println(s"$fName $lName $age $city")
     }))
   }
 
@@ -150,18 +150,30 @@ object Main extends App {
   def mostCommonLastName: Unit ={
     val comName = Future {
       val query = peopleTable.groupBy(_.lName)
-        .map{ case (fName, results) => fName -> results.length}
-        .result
+        .map{ case (lName, results) => lName -> results.length}.result
       db.run(query)
     }
     Await.result(comName,Duration.Inf).andThen( {
-      case Success(value) => println("Most common Name: " + value.max._1 + " occuring " + value.max._2 + " times")
+      case Success(value) => println("Most common Last Name: " + value.max._1 + " occuring " + value.max._2 + " times")
       case Failure(error) =>
         println("Update failed due to: " + error.getMessage)
     })
 
   }
-  mostCommonName
+  def mostCommonCity: Unit ={
+    val comName = Future {
+      val query = peopleTable.groupBy(_.city)
+        .map{ case (city, results) => city -> results.length}.result
+      db.run(query)
+    }
+    Await.result(comName,Duration.Inf).andThen( {
+      case Success(value) => println(" Most common city: " + value.find(p => p._2 == value.map(v => v._2).max).head._1)
+      case Failure(error) =>
+        println("Update failed due to: " + error.getMessage)
+    })
+
+  }
+  mostCommonCity
 }
 
 
