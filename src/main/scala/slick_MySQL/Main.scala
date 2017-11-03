@@ -184,11 +184,11 @@ object Main extends App {
     Await.result(getNeigh, Duration.Inf).andThen({
       case Success(table) =>
         val neighs = table.diff(table.distinct).distinct
-        println("\nNeighbours on the list are as below:")
+        println("\nNeighbours on the database are as below:\nid\tfname\tlastname city\tstreet")
         for(block <- neighs){
           val secondQuery= Future {
             db.run(peopleTable.filter(p => p.street === block._1 && p.city === block._2).result.map(_.foreach{
-              case (id, fName, lName, age, city, street) => println(s"$fName $lName $age $city $street")
+              case (id, fName, lName, age, city, street) => println(s"$id\t$fName\t$lName\t$city\t$street")
             }))
           }
         }

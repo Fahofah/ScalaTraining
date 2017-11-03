@@ -4,6 +4,7 @@ import java.util.Calendar
 
 import scala.collection.mutable
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import java.time.Instant
 
 class Garage {
 
@@ -11,13 +12,32 @@ class Garage {
   val employeeList = scala.collection.mutable.MutableList[Employee]()
   var carList = scala.collection.mutable.MutableList[Car]()
   var bikeList = scala.collection.mutable.MutableList[Bike]()
+  val invoicedList = List[Double]()
   var bills = scala.collection.mutable.Map[Int, Int]()
-//    val vehicleList = scala.collection.mutable.MutableList[Vehicle]() CANT ACCESS ATTRIBUTES IF LIST TYPE PARENT!!!
   val basePriceCar = 100
   val basePriceBike = 50
 
+  def startSimulation: Unit = {
+    println("started")
+    for(i<- 1 to 20){
+      val car = new Car(i,s"Make$i",s"model$i",s"motorType$i",s"trans$i",5,Calendar.getInstance().toString)
+      car.addParts
+      carList += car
+    }
+    carList.foreach(println)
+    for(i<- 1 to 20){
+      val employee = new Employee(i,s"name$i",s"role$i")
+      employeeList += employee
+    }
+    println()
+    employeeList.foreach(println)
+    println()
+    carList.foreach(car => fixVehicle(car.ownerID,"car"))
+    printCarReports
+  }
+
   def addCustomer: Unit ={
-    println("Please enter the full name of the new Customer:\n")
+    println("Please enter this full name of this new Customer:\n")
     val newCustomer = Customer(readLine())
     customerList += newCustomer
     println(s"New customer added with ID #${newCustomer.ID}")
@@ -56,28 +76,49 @@ class Garage {
     }
   }
 
+  def hourToMilli(hour: Double): Long = (hour * 60 * 60 * 1000).toLong
+
+  def serviceTime(car: Car, brokenNum: Int): Unit = {
+    val now = System.currentTimeMillis()
+    car.serviceStart = now
+    car.serviceEnd = now + hourToMilli(brokenNum * 0.78)
+  }
 
   def fixVehicle(id: Int, vehType: String,model : Option[String] = None): Unit = {
-    vehType match {
-      case "car" =>  var theCar = carList.filter(_.ownerID == id)
-        if(theCar.size >1) theCar = theCar.filter(_.model == model)
-        val brokenParts = theCar.head.partsList.filter(_.state == "broken") //.head.state = "functioning"
-        var totalPrice: Int = brokenParts.foldLeft(0){(totalPrice,part ) => calBroken(totalPrice,part.name) }
-        theCar.head.fixed = true
-        println(totalPrice)
-      case "bike" =>
-        var theBike = bikeList.filter(_.ownerID == id)
-        if(theBike.size >1) theBike = theBike.filter(_.model == model)
-        theBike.head.fixed = true
+    val availableEmps = employeeList.filter(_.isAvailable == true)
+    if(availableEmps.nonEmpty) {
+      availableEmps.head.isAvailable = false
+      vehType match {
+        case "car" => var thisCar = carList.filter(_.ownerID == id)
+          if (thisCar.size > 1) thisCar = thisCar.filter(_.model == model)
+
+          val brokenParts = thisCar.head.partsList.filter(_.state == "broken") //.head.state = "functioning"
+          serviceTime(thisCar.head,brokenParts.length)
+
+          var totalPrice: Int = brokenParts.foldLeft(0) { (totalPrice, part) => calBroken(totalPrice, part.name) }
+          thisCar.head.repairCost = totalPrice
+
+          invoicedList :+ totalPrice
+
+          thisCar.head.fixed = true
+
+          thisCar.head.attendedEmployeeId = availableEmps.head.ID
+
+        case "bike" =>
+          var thisBike = bikeList.filter(_.ownerID == id)
+          if (thisBike.size > 1) thisBike = thisBike.filter(_.model == model)
+          thisBike.head.fixed = true
+      }
     }
+      else println("no available employee")
   }
+
   def getCustomerID(owner: String): Int = {
     try
       owner forall Character.isDigit match {
         case true => customerList.filter(_.ID == owner.toInt).map(_.ID).head
         case false => customerList.filter(_.fullName == owner.toString).map(_.ID).head
       }
-
     catch {
       case e: Exception => println("exception caught: " + e)
         -1
@@ -122,10 +163,9 @@ class Garage {
     bills += (id -> cost)
   }
 
-  def getCarPartList(id:Int): Unit ={
-    carList.filter(_.ownerID == id).head.partsList.foreach(println)
+  def listCarPartList(id:Int): Unit ={
+    carList.foreach(car => car.partsList.foreach(println))
   }
-
 
 
   def getDetails(vehType:String): ArrayBuffer[String] = {
@@ -149,6 +189,10 @@ class Garage {
       }
     }
     details
+  }
+
+  def printCarReports: Unit = {
+    carList.foreach(car => car.createReport)
   }
 }
 
