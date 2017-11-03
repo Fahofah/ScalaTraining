@@ -49,13 +49,17 @@ object Main extends App {
   def runQuery(): Unit = {
     val insertPeople = Future {
       val query = peopleTable ++= Seq(
-        (10, "Jack", "Wood", 36, "Lonodn"),
-        (20, "Tim", "Brown", 24, "Lonodn"),
-        (12,"Tom","Marcus", 42, "Lonodn"),
-        (12,"Richard","Wood", 23, "Manchester"),
-        (12,"Mary","Marcus", 41,"Leeds"),
-        (12,"Evan","Maxis", 72,"lhipley"),
-        (13,"Tom","Marco",45, "Leeds")
+        (10, "Jack", "Wood", 36, "London","Bayswater"),
+        (20, "Tim", "Brown", 24, "London","Bayswater"),
+        (12,"Tom","Marcus", 42, "London", "Prince Street"),
+        (12,"Richard","Wood", 23, "Manchester","Piccadily"),
+        (12,"Mary","Marcus", 41,"Leeds", "Headrow"),
+        (12,"Evan","Maxis", 72,"Shipley", "Town Street"),
+        (13,"Tom","Marco",45, "Leeds", "Boar Lane"),
+        (12,"Mark","Monely", 72,"London", "Town Street"),
+        (12,"Peter","Patrick", 72,"Manchester", "Town Street"),
+        (12,"Eve","mona", 72,"Shipley", "Town Street"),
+        (12,"Mona","Lisa", 72,"Leeds", "Headrow"),
       )
       // insert into `PEOPLE` (`PER_FNAME`,`PER_LNAME`,`PER_AGE`)  values (?,?,?)
       println(query.statements.head)
@@ -71,7 +75,7 @@ object Main extends App {
   def listPeople(): Unit = {
     val queryFuture = Future {
       db.run(peopleTable.result).map(_.foreach{
-        case (id, fName, lName, age, city) => println(s" $id $fName $lName $age $city")
+        case (id, fName, lName, age, city, street) => println(s" $id $fName $lName $age $city $street")
       })
     }
     Await.result(queryFuture, Duration.Inf).andThen( {
@@ -103,7 +107,7 @@ object Main extends App {
 
   def searhPeople: Unit = {
     db.run(peopleTable.filter(_.age > 40).result.map(_.foreach{
-      case (id, fName, lName, age, city) => println(s"$fName $lName $age $city")
+      case (id, fName, lName, age, city, street) => println(s"$fName $lName $age $city $street")
     }))
   }
 
@@ -167,13 +171,32 @@ object Main extends App {
       db.run(query)
     }
     Await.result(comName,Duration.Inf).andThen( {
-      case Success(value) => println(" Most common city: " + value.find(p => p._2 == value.map(v => v._2).max).head._1)
+      case Success(values) => println(" Most common city: " + values.find(p => p._2 == values.map(v => v._2).max).head._1)
       case Failure(error) =>
         println("Update failed due to: " + error.getMessage)
     })
 
   }
-  mostCommonCity
+  def findNeighbours: Unit = {
+    val getNeigh = Future {
+      db.run(peopleTable.map(x => (x.street, x.city)).result)
+    }
+    Await.result(getNeigh, Duration.Inf).andThen({
+      case Success(table) =>
+        val neighs = table.diff(table.distinct).distinct
+        println("\nNeighbours on the list are as below:")
+        for(block <- neighs){
+          val secondQuery= Future {
+            db.run(peopleTable.filter(p => p.street === block._1 && p.city === block._2).result.map(_.foreach{
+              case (id, fName, lName, age, city, street) => println(s"$fName $lName $age $city $street")
+            }))
+          }
+        }
+      case Failure(error) =>
+        println("Failed due to: " + error.getMessage)
+    })
+  }
+findNeighbours
 }
 
 
